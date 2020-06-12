@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio</title>
+    <link rel="icon" href="favicon.ico">
+    <style media="screen">
+        .main{
+          text-align: center;
+          font-color: red;
+        }
+        .name{
+          text-align: left;
+          color: red;
+          position: sticky;
+          top: 0;
+          }
+        .right{
+          text-align:center;
+
+
+        }
+        #loading{
+          position: fixed;
+          width:100%;
+          height: 100%;
+          background: white
+          url("https://flevix.com/wp-content/uploads/2020/01/Bounce-Bar-Preloader-1.gif")
+          no-repeat center;
+          position: cover;
+
+        }
+        body{
+          background-image: linear-gradient( yellow, green, blue );
+          color: white;
+          padding: 50px;
+
+        }
+        .repo{
+          text-align: left;
+        }
+    </style>
+  </head>
+  <body>
+    <div id="loading"></div>
+    <div class="main" id="mainContainer" hidden>
+     <div class="name">
+       <img
+       height="100"
+        wigth="100"
+        id="profileImage">
+    <h2 id="FullName"> </h2>
+     </div>
+      <div> <ul id="repository"> My Reposotries
+      </ul>
+
+    <p id="bio"></p>
+    <h4 id="followersInformation"> </h4>
+    <section class="repo">
+    <p>My total followers are:
+      <ul id="repoitems">
+
+      </ul>
+    </p>
+  </section>
+
+  Follow me on <a id="Githublink">  GitHub </a>
+  <div class="right">
+      <a class="twitter-timeline" data-width="400" data-height="500" href="https://twitter.com/krishh3701?ref_src=twsrc%5Etfw" align:right>
+      Tweets by krishh3701 </a>
+    <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"> </script>
+
+        <script>
+
+      fetch("https://api.github.com/users/Krishna701")
+       .then(response => response.json())
+       .then(function(data){
+        //  console.log(data)
+
+
+         let reposUrl=data["repos_url"]
+
+
+         let followersCount = data['followers']
+         let followersInfo = "I am new to GitHub. So I have $ {followersCount} people on GitHub ";
+         document.getElementById('profileImage').src = data["avatar_url"]
+         document.getElementById('FullName').textContent = data["name"]
+         document.getElementById('bio').textContent = data["bio"]
+         document.getElementById('followersInformation').textContent= followersInfo
+         document.getElementById('Githublink').href=data['html_url']
+         document.getElementById('mainContainer').hidden= false
+         document.getElementById('loading').hidden= true
+
+         fetch( data["repos_url"])
+        .then(res => res.json())
+        .then((data)=> {
+          for(i=0; i<data.length; ++i) {
+              var ul = document.getElementById("repoitems")
+              var li = document.createElement("li")
+              li.appendChild(document.createTextNode(data[i].name))
+              ul.appendChild(li)
+          }
+
+        })
+       })
+       .catch((err) => {
+         console.log(err)
+       })
+
+    </script>
+  </body>
+</html>
